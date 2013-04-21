@@ -70,10 +70,11 @@ $("#run").click(function(event){
 
 // Editor Controls
 $("body").on("keydown","#code",function(event){
-  var end, start,next;
+  var end, start,next,line;
   start = this.selectionStart;
   end = this.selectionEnd;
-  next = ($(this).val().length>start) ? $(this).val().substring(start,start+1) : false;
+  next = (this.value.length>start) ? this.value.substring(start,start+1) : false;
+  line = (this.value.substr(0,this.selectionStart).lastIndexOf("\n")+1);
 
   if(event.keyCode===9) { // Tab
     event.preventDefault();
@@ -85,6 +86,18 @@ $("body").on("keydown","#code",function(event){
     event.preventDefault();
     $("#run").click();
   }
+
+  if(event.keyCode===219 && event.metaKey) { // Indent <-
+    event.preventDefault();
+    $(this).val( $(this).val().substring(0,line) + $(this).val().substring(line + ((this.value.substring(line,line+2)==="  ") ? 2 : (this.value.substring(line,line+1)===" ") ? 1 : 0)));
+    this.selectionStart = this.selectionEnd = Math.max(line,start - 2);
+  }
+  if(event.keyCode===221 && event.metaKey) { // Indent ->
+    event.preventDefault();
+    $(this).val( $(this).val().substring(0,line) + "  " + $(this).val().substring(line));
+    this.selectionStart = this.selectionEnd = start + 2;
+  }
+
 
   if(event.keyCode===219 && event.shiftKey) { // Braces
     event.preventDefault();
