@@ -8,7 +8,7 @@
     body{font:200 1em/1.6em Consolas, "Consolas for BBEdit", "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;margin:0;padding:1em 2em;}
     small{display: inline;color: #aaa;font-size: 40%;}
     textarea,pre{display: block;font:inherit;margin-bottom:16px;padding-bottom:1em;overflow-y:auto;}
-    textarea,pre{background:#f7f7f9;border:1px solid #e1e1e8;border-radius:2px;padding:8px;resize:none;min-height:16em;width:95%;min-width:20em;max-width:85em;}
+    textarea,pre{background:#f7f7f9;border:1px solid #e1e1e8;border-radius:2px;padding:8px;resize:none;min-height:20em;width:95%;min-width:20em;max-width:85em;}
     textarea:focus{border-color:#96c;outline:none;}
     pre{min-height:4em;}
     p{clear:both;}
@@ -87,6 +87,11 @@ $("body").on("keydown","#code",function(event){
     $("#run").click();
   }
 
+  if(event.keyCode===82 && event.metaKey) { // Meta + R
+    event.preventDefault();
+    $("#run").click();
+  }
+
   if(event.keyCode===219 && event.metaKey) { // Indent <-
     event.preventDefault();
     $(this).val( $(this).val().substring(0,line) + $(this).val().substring(line + ((this.value.substring(line,line+2)==="  ") ? 2 : (this.value.substring(line,line+1)===" ") ? 1 : 0)));
@@ -135,7 +140,7 @@ $("body").on("keydown","#code",function(event){
 });
 
 // Statusbar
-$("body").on("keyup","#code",function(event){
+$("body").on("keyup mouseup","#code",function(event){
   text = $(this).val() || $(this).text();
 
   // Line Number
